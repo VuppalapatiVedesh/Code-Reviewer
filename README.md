@@ -82,18 +82,6 @@ Open your browser and navigate to:
 
 ---
 
-## Screenshots
-
-*(Insert your screenshots here once deployed or running)*
-
-### 1. Workspace Card Input
-![Workspace Input Interface](https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=800&q=80)
-
-### 2. Review Report & Code Highlight
-![Review Results Display](https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80)
-
----
-
 ## Code Quality & Technical Stack
 - **Backend**: Python 3, Flask, `python-dotenv` for config management.
 - **AI Integrations**: Groq API using standard OpenAI Python Client (utilizing model `llama-3.3-70b-versatile`).
