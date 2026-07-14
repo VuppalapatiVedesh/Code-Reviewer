@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Code Reviewer & Explainer</title>
+    <!-- Modern Premium Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Local Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="background-glow bg-glow-1"></div>
+    <div class="background-glow bg-glow-2"></div>
+
+    <main class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-badge">AI</div>
+            <h1 id="app-title">Intelligent Code Reviewer</h1>
+            <p class="app-subtitle">Get instant bug reports, friendly explanations, and optimized versions of your code powered by Llama 3.3.</p>
+        </header>
+
+        <!-- Main Workspace Card -->
+        <section class="card">
+            <form action="/" method="POST" id="reviewer-form">
+                <div class="form-row">
+                    <label for="language-select" class="form-label">Target Language</label>
+                    <div class="select-wrapper">
+                        <select id="language-select" name="language">
+                            <option value="python" {% if language == 'python' %}selected{% endif %}>Python</option>
+                            <option value="javascript" {% if language == 'javascript' %}selected{% endif %}>JavaScript</option>
+                            <option value="java" {% if language == 'java' %}selected{% endif %}>Java</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="code-input" class="form-label">Paste Your Code Here</label>
+                    <textarea id="code-input" name="code" rows="12" placeholder="def my_function():&#10;    # Write or paste your code here..." required>{{ code }}</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="submit-btn" class="btn btn-primary">
+                        <span class="btn-text">Review Code</span>
+                        <div class="spinner-inline" id="btn-spinner" style="display: none;"></div>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Error/Info Messages -->
+        {% if error_message %}
+        <div class="alert alert-error" id="error-alert">
+            <svg class="alert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            <div class="alert-content">
+                {{ error_message }}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Review Results Section -->
+        {% if review_output %}
+        <section class="card results-card" id="results-section">
+            <div class="card-header">
+                <h2 class="card-title">Review Output</h2>
+                <button class="btn btn-secondary btn-sm" id="scroll-to-input" type="button">Review New Code</button>
+            </div>
+            <div class="divider"></div>
+            <div class="markdown-content">
+                {{ review_output | safe }}
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 Intelligent Code Reviewer. Powered by Groq API & Flask.</p>
+    </footer>
+
+    <!-- Minimal script for premium interactions -->
+    <script>
+        document.getElementById('reviewer-form').addEventListener('submit', function() {
+            const btn = document.getElementById('submit-btn');
+            const spinner = document.getElementById('btn-spinner');
+            const btnText = btn.querySelector('.btn-text');
+
+            // Disable button to prevent double submits and show loading state
+            btn.classList.add('btn-loading');
+            btn.disabled = true;
+            btnText.textContent = "Analyzing Code...";
+            spinner.style.display = 'inline-block';
+        });
+
+        // Smooth scroll to results if they are loaded
+        const resultsSection = document.getElementById('results-section');
+        if (resultsSection) {
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Scroll back to top interaction
+        const scrollBtn = document.getElementById('scroll-to-input');
+        if (scrollBtn) {
+            scrollBtn.addEventListener('click', function() {
+                document.getElementById('reviewer-form').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('code-input').focus();
+            });
+        }
+    </script>
+</body>
+</html>
